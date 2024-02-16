@@ -9,7 +9,13 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 3.0f; // movement speed
     public float bulletSpeed = 6.0f; // speed of projectile movement
     public float fireCooldown = 0.5f; // cooldown between projectile shots
-    private float _nextFireTime = 0f; // time when the next shot can be fired
+    private float nextFireTime = 0f; // time when the next shot can be fired
+
+    [Header("Link to GUI")]
+    public int score = 0;
+    public int lives = 3;
+
+    [Header("Objects")]
     public GameObject bulletPrefab;
     public Transform firePoint;
     public DisplayLives displayLives;
@@ -18,12 +24,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Sound Effects")]
     public AudioClip shootingSound;
     public AudioClip dyingSound;
-    private AudioSource _shootingAudioSource;
-    private AudioSource _dyingAudioSource;
-
-    [Header("Link to GUI")]
-    public int score = 0;
-    public int lives = 3;
+    private AudioSource shootingAudioSource;
+    private AudioSource dyingAudioSource;
 
     // If player gets hit
     private void OnTriggerEnter(Collider collision)
@@ -36,8 +38,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        _shootingAudioSource = GetComponent<AudioSource>();
-        _dyingAudioSource = GetComponent<AudioSource>();
+        shootingAudioSource = gameObject.GetComponent<AudioSource>();
+        dyingAudioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -49,21 +51,11 @@ public class PlayerMovement : MonoBehaviour
         transform.Translate(movement);
 
         // Fire projectile from point of player
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= nextFireTime)
         {
             Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            _nextFireTime = Time.time + fireCooldown;
-            PlayShootingSound();
-            PlayerLosesLife();
-        }
-    }
-
-    // make shooting sound
-    private void PlayShootingSound()
-    {
-        if (shootingSound != null)
-        {
-            _shootingAudioSource.PlayOneShot(shootingSound, 0.5f);
+            nextFireTime = Time.time + fireCooldown;
+            shootingAudioSource.PlayOneShot(shootingSound, 0.5f);
         }
     }
 
@@ -72,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (dyingSound != null)
         {
-            _dyingAudioSource.PlayOneShot(dyingSound, 0.5f);
+            dyingAudioSource.PlayOneShot(dyingSound, 0.5f);
         }
     }
 

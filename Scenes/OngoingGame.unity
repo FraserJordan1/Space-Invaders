@@ -1177,6 +1177,10 @@ PrefabInstance:
       propertyPath: displayScore
       value: 
       objectReference: {fileID: 1611260369}
+    - target: {fileID: 1664382395198556279, guid: 7ed8d28e5efac51479f90f203d9798bf, type: 3}
+      propertyPath: shootingAudioSource
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3472870414062824359, guid: 7ed8d28e5efac51479f90f203d9798bf, type: 3}
       propertyPath: m_Name
       value: Player
